@@ -10,11 +10,13 @@ var binaryTarget: Target = .binaryTarget(
     path: "build/apple/valhalla-wrapper.xcframework"
 )
 
-// CI will replace the nils with the actual values when building a release
-let version: String = "0.5.1"
+// IS-0P fork: 既定で自前 Release(trace_route + protobuf局所化版)を参照する。
+// これにより消費側(is-series)は VALHALLA_MOBILE_DEV を設定せずとも正しい trace_route 版を
+// pin して引ける(upstream v0.5.1=trace_route無しへのフォールバック地雷を排除)。
+// ソースからビルドし直す時のみ VALHALLA_MOBILE_DEV=true で build/ のローカル版を使う。
 let binaryURL: String =
-    "https://github.com/Rallista/valhalla-mobile/releases/download/\(version)/valhalla-wrapper.xcframework.zip"
-let binaryChecksum: String = "0464877f9297ca9462f57c43f5ffa4825c3fed0653300c2de22cd78422d6d560"
+    "https://github.com/meme-te/valhalla-mobile/releases/download/valhalla-mobile-trace-v1/valhalla-wrapper.xcframework.zip"
+let binaryChecksum: String = "b64b21c2499eb0214e2279054a5d164d8060d3c329baa49db1ec4cff99ec0249"
 
 if !useLocalBinary {
     binaryTarget = .binaryTarget(
