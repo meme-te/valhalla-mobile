@@ -15,6 +15,7 @@ local.properties
 
 .vscode
 .claude
+.omc/
 .zed
 
 # Swift PM

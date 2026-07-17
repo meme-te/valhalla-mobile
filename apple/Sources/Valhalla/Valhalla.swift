@@ -59,4 +59,11 @@ public final class Valhalla: ValhallaProviding {
     public func route(rawRequest request: String) -> String {
         actor!.route(request)
     }
+
+    /// Map-matching (trace_route): snaps a noisy GPS trace to the road graph.
+    /// Accepts an OSRM/Valhalla `trace_route` request JSON string and returns the
+    /// raw response JSON (matched shape / legs), symmetric to `route(rawRequest:)`.
+    public func traceRoute(rawRequest request: String) -> String {
+        actor!.traceRoute(request)
+    }
 }

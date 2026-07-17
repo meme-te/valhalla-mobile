@@ -86,9 +86,19 @@ std::string config_file(config_path);
 std::string ValhallaActor::route(const std::string& request) {
     // Convert the request to a std::string
     std::string req = std::string(request);
-    
+
     // Produce the route result
     std::string result = actor->route(req);
-    
+
+    return result;
+}
+
+std::string ValhallaActor::trace_route(const std::string& request) {
+    // Convert the request to a std::string
+    std::string req = std::string(request);
+
+    // Produce the map-matching (trace_route) result
+    std::string result = actor->trace_route(req);
+
     return result;
 }
