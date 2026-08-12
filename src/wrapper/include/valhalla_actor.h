@@ -38,6 +38,11 @@ public:
     
     std::string route(const std::string& request);
     std::string trace_route(const std::string& request);
+    /// trace_attributes: 点列を道路へ吸着し、**エッジ属性**（surface / road_class / length 等）を返す。
+    /// trace_route は「経路」を返すのに対し、こちらは「その経路がどんな道か」を返す。
+    /// IS-0P では未舗装（オフロード）区間の距離割合を出すために使う＝route/trace_route の
+    /// どちらの応答にも surface が入らないため、この action でしか路面を取得できない。
+    std::string trace_attributes(const std::string& request);
 };
 
 #endif // VALHALLAACTOR_H

@@ -66,4 +66,13 @@ public final class Valhalla: ValhallaProviding {
     public func traceRoute(rawRequest request: String) -> String {
         actor!.traceRoute(request)
     }
+
+    /// Edge attributes (trace_attributes): snaps a shape to the road graph and returns the
+    /// **attributes of the matched edges** (surface, road_class, length, …) rather than a route.
+    ///
+    /// Needed because neither `route` nor `traceRoute` includes `surface` anywhere in their
+    /// responses — this is the only action that exposes whether a road is paved or unpaved.
+    public func traceAttributes(rawRequest request: String) -> String {
+        actor!.traceAttributes(request)
+    }
 }

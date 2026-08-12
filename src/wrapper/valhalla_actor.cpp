@@ -102,3 +102,13 @@ std::string ValhallaActor::trace_route(const std::string& request) {
 
     return result;
 }
+
+std::string ValhallaActor::trace_attributes(const std::string& request) {
+    // Convert the request to a std::string
+    std::string req = std::string(request);
+
+    // Produce the edge-attribute (trace_attributes) result
+    std::string result = actor->trace_attributes(req);
+
+    return result;
+}
