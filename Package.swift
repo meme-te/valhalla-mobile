@@ -10,13 +10,21 @@ var binaryTarget: Target = .binaryTarget(
     path: "build/apple/valhalla-wrapper.xcframework"
 )
 
-// IS-0P fork: 既定で自前 Release(trace_route + protobuf局所化版)を参照する。
-// これにより消費側(is-series)は VALHALLA_MOBILE_DEV を設定せずとも正しい trace_route 版を
+// IS-0P fork: 既定で自前ビルドの xcframework(trace_route + trace_attributes + protobuf局所化版)を参照する。
+// これにより消費側(is-series)は VALHALLA_MOBILE_DEV を設定せずとも正しい版を
 // pin して引ける(upstream v0.5.1=trace_route無しへのフォールバック地雷を排除)。
 // ソースからビルドし直す時のみ VALHALLA_MOBILE_DEV=true で build/ のローカル版を使う。
+//
+// 配信先: 常駐Mac の Tailscale serve（**Tailnet内限定**・Funnel無し・2026-08-13 CEO方針で移行）。
+//   - ポート 8444 は **Funnel対象外**を意図して選んでいる(443/8443/10000 は Funnel 可能ポート)。
+//   - 実体 = 常駐Mac `~/tailnet-assets/`、静的サーバ = LaunchAgent `com.is-series.tailnet-assets`
+//     (127.0.0.1:8790 のみ bind)、消えた時の復旧 = `~/scripts/funnel-health.sh` の ASSETS ガード。
+//   - ⚠️ **Tailnet に居ないマシンでは解決できない**（＝ビルドできない）。これは意図した制約で、
+//     コア成果物を「自分のみ」に保つための設計。CIを足す時はこの前提を先に解くこと。
+//   - 旧: GitHub Releases(`valhalla-mobile-trace-v1`) は**誰でもDL可能**だったため既定から外した。
 let binaryURL: String =
-    "https://github.com/meme-te/valhalla-mobile/releases/download/valhalla-mobile-trace-v1/valhalla-wrapper.xcframework.zip"
-let binaryChecksum: String = "b64b21c2499eb0214e2279054a5d164d8060d3c329baa49db1ec4cff99ec0249"
+    "https://macbook-pro.tailbd464b.ts.net:8444/assets/valhalla/trace-attrs-v1/valhalla-wrapper.xcframework.zip"
+let binaryChecksum: String = "435f33be38d0e8c1531ec3b6d3b47c705ebb49140bdc03d466fd108d6f133cdc"
 
 if !useLocalBinary {
     binaryTarget = .binaryTarget(
