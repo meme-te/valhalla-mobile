@@ -40,6 +40,7 @@ git -C src/valhalla apply ../../scripts/is0p/patches/*.patch
 > 今回の変更が黙って消える。**再ビルド時は旧 `build/apple/valhalla-wrapper.xcframework` を退避してから** `create_xcframework.sh`。
 > ⚠️ Xcode 27（ld-27037）では `ld -r -unexported_symbols_list` が自動 hidden の weak を局所化しない
 > （外部残 215）。手順2のスクリプトが `nmedit -R` で後処理する（外部残 0 を確認すること）。
+> ⚠️ zip は `zip -qry … valhalla-wrapper.xcframework -x '*.iter1bak' -x '*/.omc/*'` で作る（v2 は `.omc` の状態ファイルが1件混入＝静的ライブラリなのでアプリには入らない）。
 
 ### 2. protobuf 局所化（`scripts/is0p/run_p1_iter2.sh`）
 ```bash
