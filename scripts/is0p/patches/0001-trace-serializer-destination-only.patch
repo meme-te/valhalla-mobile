@@ -1,0 +1,14 @@
+diff --git a/src/tyr/trace_serializer.cc b/src/tyr/trace_serializer.cc
+index f27a063a6..e861bff5c 100644
+--- a/src/tyr/trace_serializer.cc
++++ b/src/tyr/trace_serializer.cc
+@@ -193,6 +193,9 @@ void serialize_edges(const AttributesController& controller,
+       if (controller(kEdgeToll)) {
+         writer("toll", edge.toll());
+       }
++      if (controller(kEdgeDestinationOnly)) {
++        writer("destination_only", edge.destination_only());
++      }
+       if (controller(kEdgeUse)) {
+         writer("use", to_string(static_cast<baldr::Use>(edge.use())));
+       }

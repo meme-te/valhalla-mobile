@@ -23,8 +23,8 @@ var binaryTarget: Target = .binaryTarget(
 //     コア成果物を「自分のみ」に保つための設計。CIを足す時はこの前提を先に解くこと。
 //   - 旧: GitHub Releases(`valhalla-mobile-trace-v1`) は**誰でもDL可能**だったため既定から外した。
 let binaryURL: String =
-    "https://macbook-pro.tailbd464b.ts.net:8444/assets/valhalla/trace-attrs-v1/valhalla-wrapper.xcframework.zip"
-let binaryChecksum: String = "435f33be38d0e8c1531ec3b6d3b47c705ebb49140bdc03d466fd108d6f133cdc"
+    "https://macbook-pro.tailbd464b.ts.net:8444/assets/valhalla/trace-attrs-v2/valhalla-wrapper.xcframework.zip"
+let binaryChecksum: String = "6dd0b42d14f485908efdfca8d4df2ff29a2e392320a90293edc48b6aa1dfa27a"
 
 if !useLocalBinary {
     binaryTarget = .binaryTarget(

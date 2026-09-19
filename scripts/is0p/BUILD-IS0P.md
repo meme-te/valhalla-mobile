@@ -28,6 +28,19 @@ git clone https://github.com/microsoft/vcpkg    # README 準拠 tag 2025.12.12
 ```
 この時点の xcframework は absl/protobuf 外部露出シンボル ≒ 4017 個で、onnx 共存時に SIGSEGV する。
 
+### 1-b. valhalla 本体へのパッチ（`scripts/is0p/patches/`）
+`src/valhalla` は上流の submodule なので、本体への変更はパッチで持つ。ビルド前に当てる:
+```bash
+git -C src/valhalla apply ../../scripts/is0p/patches/*.patch
+```
+- `0001-trace-serializer-destination-only.patch`（2026-09-19・trace-attrs-v2）＝trace_attributes の JSON に
+  `edge.destination_only` を書き出す。原本は triplegbuilder で protobuf に載せるのに serializer が書かない。
+
+> ⚠️ 既存の xcframework を残したまま手順2を走らせると、`.iter1bak`（**前回の**ライブラリ）から作り直す＝
+> 今回の変更が黙って消える。**再ビルド時は旧 `build/apple/valhalla-wrapper.xcframework` を退避してから** `create_xcframework.sh`。
+> ⚠️ Xcode 27（ld-27037）では `ld -r -unexported_symbols_list` が自動 hidden の weak を局所化しない
+> （外部残 215）。手順2のスクリプトが `nmedit -R` で後処理する（外部残 0 を確認すること）。
+
 ### 2. protobuf 局所化（`scripts/is0p/run_p1_iter2.sh`）
 ```bash
 scripts/is0p/run_p1_iter2.sh [xcframework パス]

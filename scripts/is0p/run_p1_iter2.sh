@@ -59,6 +59,16 @@ process_slice() {
     xcrun ld -r -arch "$arch" -platform_version "$platform" "$MIN" "$sdkver" \
       -all_load "$TMP/w_${arch}.a" -o "$TMP/h_${arch}.o" \
       -unexported_symbols_list "$TMP/pb_${arch}.txt"
+    # Xcode 27 の ld(ld-27037) は -r で "weak external automatically hidden" の protobuf
+    # シンボルを unexported にしない（2026-09-19 実測: 外部残 215・うち valhalla 型以外 121）。
+    # -ld_classic は廃止済みなので、prelink 後に残った分を nmedit -R で局所化する。
+    set +e
+    nm -g "$TMP/h_${arch}.o" 2>/dev/null | grep -E ' [TDSBWV] ' | awk '{print $NF}' \
+      | grep '6google8protobuf' | grep -v '4absl' > "$TMP/rem_${arch}.txt"
+    set -e
+    if [ -s "$TMP/rem_${arch}.txt" ]; then
+      xcrun nmedit -R "$TMP/rem_${arch}.txt" "$TMP/h_${arch}.o"
+    fi
     ar cr "$TMP/h_${arch}.a" "$TMP/h_${arch}.o"; ranlib "$TMP/h_${arch}.a" 2>/dev/null || true
     # protobuf外部残の検証（0期待）。grep 0件=exit1 を set -e で拾わないよう +e で囲う
     set +e
